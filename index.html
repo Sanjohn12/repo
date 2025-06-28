@@ -46,12 +46,32 @@
         <title>Environmental</title>
     </head>
     <body>
-    <!-- Title bar -->
-    <div style="text-align: center; background-color: #f0f0f0; padding: 10px;">
-        <h1 style="margin: 0; font-family: sans-serif; font-size: 24px; color: #333;">Environmental Aspect</h1>
+    <!-- Stylish Title Bar -->
+    <div style="
+        text-align: center;
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        padding: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 1000;
+    ">
+        <h1 style="
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 28px;
+            color: #ffffff;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+            animation: fadeIn 1s ease-in-out;
+        ">
+            🌍 Environmental Aspect Map
+        </h1>
     </div>
 
-    <!-- The map -->
+    <!-- Optional: Spacer if needed -->
+    <div style="height: 10px;"></div>
+
+    <!-- The Map -->
     <div id="map">
         <div id="popup" class="ol-popup">
             <a href="#" id="popup-closer" class="ol-popup-closer"></a>
@@ -59,7 +79,6 @@
         </div>
     </div>
 
-        </div>
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
         <script src="./resources/ol.js"></script>
