@@ -52,7 +52,7 @@
 </style>
 
     </head>
-    <body style="margin:0; height:100vh; overflow:hidden;">
+    <body style="margin:0; height:100vh; overflow:hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
 
   <!-- Stylish Title Bar -->
   <div style="
@@ -65,16 +65,15 @@
   ">
       <h1 style="
           margin: 0;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
           font-size: 28px;
           color: #ffffff;
           text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
           letter-spacing: 1px;
-          animation: fadeIn 1s ease-in-out;
+          user-select: none;
       ">
           🌍 Environmental Aspect
       </h1>
-      <p style="color:white; margin:0; font-size:16px;">Puttalam and Mannar</p>
+      <p style="color:white; margin:0; font-size:16px; user-select: none;">Puttalam and Mannar</p>
   </div>
 
   <!-- Navigation Bar -->
@@ -85,40 +84,66 @@
     padding: 10px 0;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     position: sticky;
-    top: 80px; /* Adjust if you have a fixed header */
+    top: 80px;
     z-index: 999;
     gap: 15px;
-    font-family: 'Segoe UI', sans-serif;
   ">
-    <button class="nav-btn active" onclick="showImage('temperature')">Temperature</button>
-    <button class="nav-btn" onclick="showImage('precipitation')">Precipitation</button>
-    <button class="nav-btn" onclick="showImage('wind')">Wind</button>
-    <button class="nav-btn" onclick="showImage('forestChange')">Forest Change</button>
+    <button class="nav-btn active" onclick="showImage('temperature', event)">Temperature</button>
+    <button class="nav-btn" onclick="showImage('precipitation', event)">Precipitation</button>
+    <button class="nav-btn" onclick="showImage('wind', event)">Wind</button>
+    <button class="nav-btn" onclick="showImage('forestChange', event)">Forest Change</button>
   </nav>
 
   <!-- The Map Container -->
   <div id="map" style="position: relative; width: 100%; height: calc(100vh - 130px);">
+
       <div id="popup" class="ol-popup">
           <a href="#" id="popup-closer" class="ol-popup-closer"></a>
           <div id="popup-content"></div>
       </div>
 
-      <!-- Overlay small image on map -->
+      <!-- Overlay image container at top-left -->
       <div id="overlayImageContainer" style="
-    position: absolute;
-    bottom: 15px;
-    left: 15px;
-    width: 180px;
-    height: 120px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    z-index: 1100;
-    background: white;
-    display: block; /* Show on page load for default */
-">
-  <img id="overlayImage" src="images/temperature.png" alt="Temperature Map" style="width: 100%; height: 100%; object-fit: cover;">
-</div>
+          position: absolute;
+          top: 15px;
+          left: 15px;
+          background: white;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+          border-radius: 12px;
+          padding: 10px;
+          max-width: 320px;
+          max-height: 220px;
+          overflow: hidden;
+          display: none;  /* hidden initially */
+          z-index: 1100;
+          user-select: none;
+      ">
+        <button id="closeOverlayBtn" aria-label="Close image overlay" style="
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            font-weight: bold;
+            line-height: 1;
+            transition: color 0.2s ease;
+            user-select: none;
+          "
+          onmouseover="this.style.color='#007cf0';"
+          onmouseout="this.style.color='#666';"
+          >&times;</button>
+
+        <img id="overlayImage" src="" alt="" style="
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            object-fit: contain;
+        ">
+      </div>
 
   </div>
 
@@ -126,12 +151,15 @@
     .nav-btn {
       background: transparent;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 24px;
       color: white;
       font-size: 16px;
       cursor: pointer;
       border-radius: 30px;
       transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+      font-weight: 600;
+      box-shadow: none;
     }
 
     .nav-btn:hover {
@@ -141,13 +169,13 @@
     .nav-btn.active {
       background-color: #ffffff;
       color: #007cf0;
-      font-weight: 600;
-      box-shadow: 0 0 10px #00dfd8;
+      box-shadow: 0 0 12px #00dfd8;
     }
   </style>
 
   <script>
-    function showImage(type) {
+    // Function to show image overlay and highlight button
+    function showImage(type, event) {
       const overlayContainer = document.getElementById('overlayImageContainer');
       const overlayImg = document.getElementById('overlayImage');
       const buttons = document.querySelectorAll('.nav-btn');
@@ -180,16 +208,31 @@
       if(imgSrc){
         overlayImg.src = imgSrc;
         overlayImg.alt = imgAlt;
-        overlayContainer.style.display = 'block';  // show the overlay
+        overlayContainer.style.display = 'block';
       } else {
-        overlayContainer.style.display = 'none';   // hide if no image
+        overlayContainer.style.display = 'none';
       }
 
       // Update active button styling
       buttons.forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+      if(event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      }
     }
+
+    // Close overlay button functionality
+    document.getElementById('closeOverlayBtn').addEventListener('click', () => {
+      document.getElementById('overlayImageContainer').style.display = 'none';
+      // Remove active class from all nav buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    });
+
+    // Show default image on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      showImage('temperature');
+    });
   </script>
+
 
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
