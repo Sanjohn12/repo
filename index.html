@@ -52,124 +52,143 @@
 </style>
 
     </head>
-    <body>
-    <!-- Stylish Title Bar -->
-    <div style="
-        text-align: center;
-        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-        padding: 15px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        position: relative;
-        z-index: 1000;
-    ">
-        <h1 style="
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 28px;
-            color: #ffffff;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-            letter-spacing: 1px;
-            animation: fadeIn 1s ease-in-out;
-        ">
-            🌍 Environmental Aspect
-        </h1>
-        <p style="color:white; margin:0; font-size:16px;">Puttalam and Mannar</p>
+    <body style="margin:0; height:100vh; overflow:hidden;">
 
-    </div>
-<!-- Navigation Bar -->
-<nav style="
-  display: flex;
-  justify-content: center;
-  background: linear-gradient(90deg, #007cf0, #00dfd8);
-  padding: 10px 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  position: sticky;
-  top: 80px; /* Adjust if you have a fixed header */
-  z-index: 999;
-  gap: 15px;
-  font-family: 'Segoe UI', sans-serif;
-">
-  <button class="nav-btn active" onclick="showImage('temperature')">Temperature</button>
-  <button class="nav-btn" onclick="showImage('precipitation')">Precipitation</button>
-  <button class="nav-btn" onclick="showImage('wind')">Wind</button>
-  <button class="nav-btn" onclick="showImage('forestChange')">Forest Change</button>
-</nav>
+  <!-- Stylish Title Bar -->
+  <div style="
+      text-align: center;
+      background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1000;
+  ">
+      <h1 style="
+          margin: 0;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-size: 28px;
+          color: #ffffff;
+          text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+          letter-spacing: 1px;
+          animation: fadeIn 1s ease-in-out;
+      ">
+          🌍 Environmental Aspect
+      </h1>
+      <p style="color:white; margin:0; font-size:16px;">Puttalam and Mannar</p>
+  </div>
 
-<!-- Image display area -->
-<div id="imageDisplay" style="text-align: center; margin-top: 20px;">
-  <img id="mapImage" src="images/temperature.png" alt="Temperature Map" style="max-width: 90%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-</div>
+  <!-- Navigation Bar -->
+  <nav style="
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(90deg, #007cf0, #00dfd8);
+    padding: 10px 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 80px; /* Adjust if you have a fixed header */
+    z-index: 999;
+    gap: 15px;
+    font-family: 'Segoe UI', sans-serif;
+  ">
+    <button class="nav-btn active" onclick="showImage('temperature')">Temperature</button>
+    <button class="nav-btn" onclick="showImage('precipitation')">Precipitation</button>
+    <button class="nav-btn" onclick="showImage('wind')">Wind</button>
+    <button class="nav-btn" onclick="showImage('forestChange')">Forest Change</button>
+  </nav>
 
-<style>
-  .nav-btn {
-    background: transparent;
-    border: none;
-    padding: 10px 20px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 30px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
+  <!-- The Map Container -->
+  <div id="map" style="position: relative; width: 100%; height: calc(100vh - 130px);">
+      <div id="popup" class="ol-popup">
+          <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+          <div id="popup-content"></div>
+      </div>
 
-  .nav-btn:hover {
-    background-color: rgba(255,255,255,0.2);
-  }
+      <!-- Overlay small image on map -->
+      <div id="overlayImageContainer" style="
+          position: absolute;
+          bottom: 15px;
+          left: 15px;
+          width: 180px;
+          height: 120px;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+          z-index: 1100;
+          background: white;
+          display: block; /* Show on page load for default */
+      ">
+        <img id="overlayImage" src="images/temperature.png" alt="Temperature Map" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+  </div>
 
-  .nav-btn.active {
-    background-color: #ffffff;
-    color: #007cf0;
-    font-weight: 600;
-    box-shadow: 0 0 10px #00dfd8;
-  }
-</style>
-
-<script>
-  function showImage(type) {
-    const image = document.getElementById('mapImage');
-    const buttons = document.querySelectorAll('.nav-btn');
-
-    // Update image src & alt based on type
-    switch(type) {
-      case 'temperature':
-        image.src = 'images/temperature.png';
-        image.alt = 'Temperature Map';
-        break;
-      case 'precipitation':
-        image.src = 'images/precipitation.png';
-        image.alt = 'Precipitation Map';
-        break;
-      case 'wind':
-        image.src = 'images/wind.png';
-        image.alt = 'Wind Map';
-        break;
-      case 'forestChange':
-        image.src = 'graph_ndvi.png';
-        image.alt = 'Forest Change Map';
-        break;
-      default:
-        image.src = '';
-        image.alt = 'No image';
+  <style>
+    .nav-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 30px;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    // Remove active class from all buttons
-    buttons.forEach(btn => btn.classList.remove('active'));
-    // Add active class to clicked button
-    event.target.classList.add('active');
-  }
-</script>
+    .nav-btn:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
 
+    .nav-btn.active {
+      background-color: #ffffff;
+      color: #007cf0;
+      font-weight: 600;
+      box-shadow: 0 0 10px #00dfd8;
+    }
+  </style>
 
-    <!-- Optional: Spacer if needed -->
-    <div style="height: 10px;"></div>
+  <script>
+    function showImage(type) {
+      const overlayContainer = document.getElementById('overlayImageContainer');
+      const overlayImg = document.getElementById('overlayImage');
+      const buttons = document.querySelectorAll('.nav-btn');
 
-    <!-- The Map -->
-    <div id="map">
-        <div id="popup" class="ol-popup">
-            <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-            <div id="popup-content"></div>
-        </div>
-    </div>
+      let imgSrc = '';
+      let imgAlt = '';
+
+      switch(type) {
+        case 'temperature':
+          imgSrc = 'images/temperature.png';
+          imgAlt = 'Temperature Map';
+          break;
+        case 'precipitation':
+          imgSrc = 'images/precipitation.png';
+          imgAlt = 'Precipitation Map';
+          break;
+        case 'wind':
+          imgSrc = 'images/wind.png';
+          imgAlt = 'Wind Map';
+          break;
+        case 'forestChange':
+          imgSrc = 'graph_ndvi.png';
+          imgAlt = 'Forest Change Map';
+          break;
+        default:
+          imgSrc = '';
+          imgAlt = '';
+      }
+
+      if(imgSrc){
+        overlayImg.src = imgSrc;
+        overlayImg.alt = imgAlt;
+        overlayContainer.style.display = 'block';  // show the overlay
+      } else {
+        overlayContainer.style.display = 'none';   // hide if no image
+      }
+
+      // Update active button styling
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+  </script>
 
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
