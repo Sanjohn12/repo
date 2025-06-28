@@ -76,22 +76,60 @@
         <p style="color:white; margin:0; font-size:16px;">Puttalam and Mannar</p>
 
     </div>
-<!-- Buttons container -->
-<div style="text-align: center; margin: 15px 0;">
-  <button onclick="showImage('temperature')" style="margin: 5px; padding: 8px 15px;">Temperature</button>
-  <button onclick="showImage('precipitation')" style="margin: 5px; padding: 8px 15px;">Precipitation</button>
-  <button onclick="showImage('wind')" style="margin: 5px; padding: 8px 15px;">Wind</button>
-  <button onclick="showImage('forestChange')" style="margin: 5px; padding: 8px 15px;">Forest Change</button>
-</div>
+<!-- Navigation Bar -->
+<nav style="
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(90deg, #007cf0, #00dfd8);
+  padding: 10px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  position: sticky;
+  top: 80px; /* Adjust if you have a fixed header */
+  z-index: 999;
+  gap: 15px;
+  font-family: 'Segoe UI', sans-serif;
+">
+  <button class="nav-btn active" onclick="showImage('temperature')">Temperature</button>
+  <button class="nav-btn" onclick="showImage('precipitation')">Precipitation</button>
+  <button class="nav-btn" onclick="showImage('wind')">Wind</button>
+  <button class="nav-btn" onclick="showImage('forestChange')">Forest Change</button>
+</nav>
 
 <!-- Image display area -->
-<div id="imageDisplay" style="text-align: center; margin-top: 10px;">
-  <img id="mapImage" src="images/temperature.png" alt="Map Image" style="max-width: 90%; height: auto; border: 2px solid #ccc; border-radius: 6px;">
+<div id="imageDisplay" style="text-align: center; margin-top: 20px;">
+  <img id="mapImage" src="images/temperature.png" alt="Temperature Map" style="max-width: 90%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
 </div>
+
+<style>
+  .nav-btn {
+    background: transparent;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .nav-btn:hover {
+    background-color: rgba(255,255,255,0.2);
+  }
+
+  .nav-btn.active {
+    background-color: #ffffff;
+    color: #007cf0;
+    font-weight: 600;
+    box-shadow: 0 0 10px #00dfd8;
+  }
+</style>
 
 <script>
   function showImage(type) {
     const image = document.getElementById('mapImage');
+    const buttons = document.querySelectorAll('.nav-btn');
+
+    // Update image src & alt based on type
     switch(type) {
       case 'temperature':
         image.src = 'images/temperature.png';
@@ -113,8 +151,14 @@
         image.src = '';
         image.alt = 'No image';
     }
+
+    // Remove active class from all buttons
+    buttons.forEach(btn => btn.classList.remove('active'));
+    // Add active class to clicked button
+    event.target.classList.add('active');
   }
 </script>
+
 
     <!-- Optional: Spacer if needed -->
     <div style="height: 10px;"></div>
