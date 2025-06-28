@@ -76,6 +76,45 @@
         <p style="color:white; margin:0; font-size:16px;">Puttalam and Mannar</p>
 
     </div>
+<!-- Buttons container -->
+<div style="text-align: center; margin: 15px 0;">
+  <button onclick="showImage('temperature')" style="margin: 5px; padding: 8px 15px;">Temperature</button>
+  <button onclick="showImage('precipitation')" style="margin: 5px; padding: 8px 15px;">Precipitation</button>
+  <button onclick="showImage('wind')" style="margin: 5px; padding: 8px 15px;">Wind</button>
+  <button onclick="showImage('forestChange')" style="margin: 5px; padding: 8px 15px;">Forest Change</button>
+</div>
+
+<!-- Image display area -->
+<div id="imageDisplay" style="text-align: center; margin-top: 10px;">
+  <img id="mapImage" src="images/temperature.png" alt="Map Image" style="max-width: 90%; height: auto; border: 2px solid #ccc; border-radius: 6px;">
+</div>
+
+<script>
+  function showImage(type) {
+    const image = document.getElementById('mapImage');
+    switch(type) {
+      case 'temperature':
+        image.src = 'images/temperature.png';
+        image.alt = 'Temperature Map';
+        break;
+      case 'precipitation':
+        image.src = 'images/precipitation.png';
+        image.alt = 'Precipitation Map';
+        break;
+      case 'wind':
+        image.src = 'images/wind.png';
+        image.alt = 'Wind Map';
+        break;
+      case 'forestChange':
+        image.src = 'images/forest_change.png';
+        image.alt = 'Forest Change Map';
+        break;
+      default:
+        image.src = '';
+        image.alt = 'No image';
+    }
+  }
+</script>
 
     <!-- Optional: Spacer if needed -->
     <div style="height: 10px;"></div>
